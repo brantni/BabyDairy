@@ -1,0 +1,33 @@
+/* 
+* @Author: Marte
+* @Date:   2017-05-09 14:09:02
+* @Last Modified by:   Marte
+* @Last Modified time: 2017-05-10 10:29:27
+*/
+.photo{
+    
+}
+.photo .photo-baoImg{
+    width:200px;
+    height:200px;
+}
+.photo .photo-small:hover{
+    cursor:url(/babyDairy/src/image/big.cur), auto;
+}
+.photo .photo-big{
+    -webkit-transform: scale(2,2);
+       -moz-transform: scale(2,2);
+        -ms-transform: scale(2,2);
+         -o-transform: scale(2,2);
+            transform: scale(2,2);
+    transform-origin:0 0;
+}
+.photo .photo-big:hover{
+    cursor:url(/babyDairy/src/image/small.cur), auto;
+}
+.photo .photo-content{
+    margin-left: 55px;
+}
+.photo .photo-content p{
+    margin-bottom: 10px;
+}
