@@ -1,0 +1,52 @@
+/* 
+* @Author: Marte
+* @Date:   2017-05-18 16:53:55
+* @Last Modified by:   Marte
+* @Last Modified time: 2017-05-18 18:06:55
+*/
+.tools{
+    position: absolute;
+    right: 30px;
+    top: 70px;
+    margin-right: 30px;
+    max-width: 200px;
+    height:25px;
+    cursor: pointer;
+}
+.tools .tool{
+    position:absolute;
+    width:25px;
+    height:100%;
+    right:0;
+    z-index: 99;
+}
+.tools:hover .toolList{
+    right:25px;
+    /*opacity:1;*/
+}
+.tools:hover .changeBak{
+    margin-right: 10px;
+}
+.tools .toolList{
+    position:absolute;
+    max-width:150px;
+    height:100%;
+    right:0px;
+    /*opacity:0;*/
+    -webkit-transition: right .25s linear;
+       -moz-transition: right .25s linear;
+        -ms-transition: right .25s linear;
+         -o-transition: right .25s linear;
+            transition: right .25s linear;
+}
+.tools .toolList img{
+    margin-right: 0px;
+}
+.tools .changeBak{
+    width:25px;
+    height:100%;
+}
+.tools .changeBak{
+    width:25px;
+    height:100%;
+}

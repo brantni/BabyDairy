@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-05-05 11:28:57
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-11 18:16:52
+* @Last Modified time: 2017-05-18 17:16:42
 */
 *{
     margin:0;
@@ -35,10 +35,13 @@ strong{
 .g-hidden{
     display:none;
 }
+.mainContent{
+    position:relative;
+}
 .content{
     width:700px;
     margin:0 auto;
-    margin-top: 70px;
+    margin-top: 20px;
 }
 .content .box{
     width:100%;

@@ -290,13 +290,105 @@ var Content = React.createClass({
         );
     }
 });
-var MainContent = React.createClass({
+
+var GotoTop = React.createClass({
+    getInitialState: function() {
+        return {show:'',scrolltimer:null};
+    },
+    _onscrollHandle:function(e){
+        var scrolltimer = this.state.scrolltimer;
+        if(scrolltimer!=null){
+            return;
+        }
+        scrolltimer = setTimeout(function(){
+            var topdistance = document.body.scrollTop;
+            if(topdistance>300){
+                this.setState({show:"show"});
+            }else{
+                this.setState({show:""});
+            }
+            clearTimeout(scrolltimer);
+            scrolltimer = null;
+            this.setState({scrolltimer:null});
+        }.bind(this), 300);
+        this.setState({scrolltimer:scrolltimer});
+    },
+    _onclickTopHandle:function(){
+        document.body.scrollTop = 0;
+    },
+    componentDidMount: function() {
+        document.addEventListener("scroll",this._onscrollHandle,false);
+    },
+    componentWillUnmount: function() {
+        document.removeEventListener("scroll", this._onscrollHandle, false);
+    },
+    render:function(){
+        var topClass = "top "+this.state.show;
+        return (
+            <div className="gotoTop">   
+                <div className={topClass} id="gotoTop" onClick={this._onclickTopHandle}>
+                    <img src="/babyDairy/src/image/top.png"/>
+                </div>
+            </div>
+        );
+    }
+});
+
+var Tools = React.createClass({
+    uploadBackgroundImage:function(){
+        $(".tools").find(".uploadBg").trigger('click');
+    },
+    _onUploadBgChangeHandle:function(e){
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            $.ajax({
+                type: "POST",
+                url: '/upload',
+                data: { img: event.target.result.split("base64,")[1] },
+                dataType: 'json',
+                success: function (data) {
+                    var url = data.url
+                    if(url){    
+                        this.props.changeBg(url);
+                    }
+                }.bind(this)
+            });
+        }.bind(this);
+        reader.readAsDataURL(file);
+    },
     render:function(){
         return (
-            <div className="mainContent">   
+            <div className="tools">   
+                <img src="/babyDairy/src/image/tool.png" className="tool"/>
+                <div className="toolList">
+                    <img src="/babyDairy/src/image/chg_bak.png" title="上传图片" className="changeBak" onClick={this.uploadBackgroundImage}/>
+                    <input type="file"  className="uploadBg g-hidden"  onChange={this._onUploadBgChangeHandle}  />
+                </div>
+            </div>
+        );
+    }
+});
+
+var MainContent = React.createClass({
+    getInitialState: function() {
+        return {bgStyle:{}};
+    },
+    changBg:function(url){
+        var style = {
+            background: "url("+url+")",
+            backgroundSize: "100% 100%"
+        };
+        this.setState({bgStyle:style});
+    },
+    render:function(){
+        return (
+            <div className="mainContent" style={this.state.bgStyle}>   
                 <Header />
                 <Content url="/babyDairy/data/lifedata.json" />
                 <ImagePreview />
+                <GotoTop />
+                <Tools changeBg = {this.changBg}/>
             </div>
         );
     }

@@ -2,12 +2,12 @@
 * @Author: Marte
 * @Date:   2017-05-05 14:05:27
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-05 18:42:56
+* @Last Modified time: 2017-05-18 17:16:17
 */
 header{
-    position: absolute;
+    /*position: absolute;
     top: 0;
-    left: 0;
+    left: 0;*/
     width: 100%;
     height: 50px;
     background: #FF4455;
@@ -17,6 +17,7 @@ header{
     color: #fff;
     flex-direction: row;
     align-items: center;
+    min-width: 700px;
 }
 header nav{
     padding:0 50px;
@@ -24,6 +25,10 @@ header nav{
     cursor: pointer;
     line-height: 50px;
     letter-spacing: 2px;
+    min-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 header nav:hover{
     background:#F14455;
