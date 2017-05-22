@@ -2,51 +2,69 @@
 * @Author: Marte
 * @Date:   2017-05-18 16:53:55
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-18 18:06:55
+* @Last Modified time: 2017-05-22 11:12:05
 */
 .tools{
     position: absolute;
     right: 30px;
     top: 70px;
     margin-right: 30px;
-    max-width: 200px;
-    height:25px;
+    max-width: 300px;
+    height:50px;
     cursor: pointer;
 }
 .tools .tool{
     position:absolute;
-    width:25px;
+    /*width:25px;*/
     height:100%;
     right:0;
     z-index: 99;
 }
-.tools:hover .toolList{
-    right:25px;
-    /*opacity:1;*/
+.tools:hover .toolList .changeBak{
+    right:85px;
+    opacity:1;
 }
-.tools:hover .changeBak{
-    margin-right: 10px;
+.tools:hover .toolList .changeAvatar{
+    right:40px;
+    opacity:1;
 }
 .tools .toolList{
     position:absolute;
-    max-width:150px;
+    max-width: 500px;
+    min-width: 100px;
     height:100%;
     right:0px;
-    /*opacity:0;*/
-    -webkit-transition: right .25s linear;
-       -moz-transition: right .25s linear;
-        -ms-transition: right .25s linear;
-         -o-transition: right .25s linear;
-            transition: right .25s linear;
+/*    opacity:0;*/
+    
 }
 .tools .toolList img{
     margin-right: 0px;
+    height:100%;
+    position:absolute;
+    right:0;
+    opacity:0;
 }
 .tools .changeBak{
-    width:25px;
-    height:100%;
+    -webkit-transition: right .3s linear;
+       -moz-transition: right .3s linear;
+        -ms-transition: right .3s linear;
+         -o-transition: right .3s linear;
+            transition: right .5s linear;
+    /*-webkit-transition: opacity .3s linear;
+       -moz-transition: opacity .3s linear;
+        -ms-transition: opacity .3s linear;
+         -o-transition: opacity .3s linear;
+            transition: opacity .1s linear;*/
 }
-.tools .changeBak{
-    width:25px;
-    height:100%;
+.tools .changeAvatar{
+    -webkit-transition: right .1s linear;
+       -moz-transition: right .1s linear;
+        -ms-transition: right .1s linear;
+         -o-transition: right .1s linear;
+            transition: right .2s linear;
+    /*-webkit-transition: opacity .1s linear;
+       -moz-transition: opacity .1s linear;
+        -ms-transition: opacity .1s linear;
+         -o-transition: opacity .1s linear;
+            transition: opacity .1s linear;*/
 }

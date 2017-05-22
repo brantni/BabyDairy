@@ -29,25 +29,15 @@ var UploadImage = React.createClass({
         file.trigger('click');
     },
     _onFileChangeHandle:function(e){
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (event) {
-            $.ajax({
-                type: "POST",
-                url: '/upload',
-                data: { img: event.target.result.split("base64,")[1] },
-                dataType: 'json',
-                success: function (data) {
-                    var url = data.url
-                    if(url){    
-                        this.setState({hiddenClass: ''});
-                        this.props.onGetImageHandle(url);
-                        PubSubEvent.publish("imageFillUrl",[url]);
-                    }
-                }.bind(this)
-            });
-        }.bind(this);
-        reader.readAsDataURL(file);
+        var promise = Util.uploadFile(e);
+        promise.then(function(data){
+            var url = data.url
+            if(url){    
+                this.setState({hiddenClass: ''});
+                this.props.onGetImageHandle(url);
+                PubSubEvent.publish("imageFillUrl",[url]);
+            }
+        }.bind(this));
     },
     hidePreview:function(){
         this.setState({hiddenClass: 'g-hidden'});
@@ -58,7 +48,7 @@ var UploadImage = React.createClass({
     render: function() {
         return (
             <div className="uploadImage">
-                <img src="/babyDairy/src/image/upload_img_icon.png" title="上传图片" className="uploadImg" onClick={this._onClickUploadImgHandle} />
+                <img src="/babyDairy/src/image/chicken1.png" title="上传图片" className="uploadImg" onClick={this._onClickUploadImgHandle} />
                 <a href="####" className={this.state.hiddenClass} id="previewImg" onClick={this._onClickPreviewImgHandle}>点击预览</a>
                 <input type="file" id="file" className="file"  onChange={this._onFileChangeHandle}  />
             </div>
@@ -178,7 +168,7 @@ var Life = React.createClass({
     render:function(){
         return (
             <div className="box life g-clear">
-                <img src="/babyDairy/src/image/avatar_angel.jpg" className="avatarImg" />
+                <img src={this.props.avatar} className="avatarImg" />
                 <h3>{this.props.title}</h3>
                 <div>{this.props.text}</div>
             </div>
@@ -191,10 +181,10 @@ var LifeList = React.createClass({
         var lifeNodes = this.props.data.map(function(life) {
             if(!life.url){
                 return (
-                    <Life text={life.text} title={life.title} />
+                    <Life text={life.text} title={life.title}  avatar={this.props.avatar}/>
                 );
             }
-        });
+        }.bind(this));
         return (
             <div className="lifeList">
                 {lifeNodes}
@@ -220,7 +210,7 @@ var Photo = React.createClass({
         var pClass = "photo-baoImg "+this.state.photoClass;
         return (
             <div className="box photo">
-                <img src="/babyDairy/src/image/avatar_angel.jpg" className="avatarImg" />
+                <img src={this.props.avatar} className="avatarImg" />
                 <h3>{this.props.title}</h3>
                 <div className="photo-content">
                     <p>{this.props.text}</p>
@@ -244,10 +234,10 @@ var PhotoList = React.createClass({
             if(photo.url){
                 var key = "photo"+index;
                 return (
-                    <Photo ref={key} text={photo.text} title={photo.title} url={photo.url}/>
+                    <Photo ref={key} text={photo.text} title={photo.title} url={photo.url} avatar={this.props.avatar} />
                 );
             }
-        });
+        }.bind(this));
         return (
             <div className="photoList">
                 {photoNodes}
@@ -256,36 +246,36 @@ var PhotoList = React.createClass({
     }
 });
 var Content = React.createClass({
-    loadDataFromFile: function() {
-        $.ajax({
-          url: this.props.url,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState({data: data});
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
     getInitialState: function() {
-        return {data: []};
+        return {lifeData: [],photoData:[],avatar:''};
     },
     componentDidMount: function() {
-        this.loadDataFromFile();
+        this.props.loadData.then(function(data){
+            this.setState({lifeData:data.life.length?data.life:[],photoData:data.photo.length?data.photo:[]});
+        }.bind(this));
+
+        PubSubEvent.subscribe("changeAvatar",function(data){
+            this.setState({avatar:data});
+        }.bind(this));
     },
     getBabyFormData:function(formData){
-        var data = this.state.data;
-        data.unshift(formData);
-        this.setState({data:data});
+        var data;
+        if(formData.url){
+            data = this.state.photoData;
+            data.unshift(formData);
+            this.setState({photoData:data});
+        }else{
+            data = this.state.lifeData;
+            data.unshift(formData);
+            this.setState({lifeData:data});
+        }
     },
     render:function(){
         return (
             <div className="content">
                 <BabyForm onSubmitBabyForm = {this.getBabyFormData} />
-                <LifeList data = {this.state.data} />
-                <PhotoList data = {this.state.data} />
+                <LifeList data = {this.state.lifeData} avatar = {this.state.avatar}/>
+                <PhotoList data = {this.state.photoData} avatar = {this.state.avatar} />
             </div>   
         );
     }
@@ -335,34 +325,40 @@ var GotoTop = React.createClass({
 });
 
 var Tools = React.createClass({
-    uploadBackgroundImage:function(){
+    getInitialState: function() {
+        //changeBackground为改变背景图片，changeAvatar为改变头像
+        return {triggerEventType:""};
+    },
+    uploadImage:function(e){
+        var elem = e.target;
+        if(elem.className == "changeBak"){
+            this.setState({triggerEventType:"changeBackground"});
+        }else if(elem.className == "changeAvatar"){
+            this.setState({triggerEventType:"changeAvatar"});
+        }
         $(".tools").find(".uploadBg").trigger('click');
     },
     _onUploadBgChangeHandle:function(e){
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (event) {
-            $.ajax({
-                type: "POST",
-                url: '/upload',
-                data: { img: event.target.result.split("base64,")[1] },
-                dataType: 'json',
-                success: function (data) {
-                    var url = data.url
-                    if(url){    
-                        this.props.changeBg(url);
-                    }
-                }.bind(this)
-            });
-        }.bind(this);
-        reader.readAsDataURL(file);
+        var promise = Util.uploadFile(e);
+        promise.then(function(data){
+            var url = data.url;
+            if(url){
+                if(this.state.triggerEventType == "changeBackground"){
+                    this.props.reloadRequest("user","background",url);
+                }else if(this.state.triggerEventType == "changeAvatar"){
+                    PubSubEvent.publish("changeAvatar",[url]);
+                    this.props.reloadRequest("user","avatar",url);
+                }
+            }
+        }.bind(this));
     },
     render:function(){
         return (
             <div className="tools">   
-                <img src="/babyDairy/src/image/tool.png" className="tool"/>
+                <img src="/babyDairy/src/image/chicken7.png" className="tool"/>
                 <div className="toolList">
-                    <img src="/babyDairy/src/image/chg_bak.png" title="上传图片" className="changeBak" onClick={this.uploadBackgroundImage}/>
+                    <img src="/babyDairy/src/image/chicken6.png" title="更换背景" className="changeBak" onClick={this.uploadImage}/>
+                    <img src="/babyDairy/src/image/chicken4.png" title="更换头像" className="changeAvatar" onClick={this.uploadImage}/>
                     <input type="file"  className="uploadBg g-hidden"  onChange={this._onUploadBgChangeHandle}  />
                 </div>
             </div>
@@ -371,24 +367,62 @@ var Tools = React.createClass({
 });
 
 var MainContent = React.createClass({
-    getInitialState: function() {
-        return {bgStyle:{}};
+    loadDataFromFile: function() {
+        var p = new Promise(function(resolve){
+            $.ajax({
+                url: "/initPage",
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    resolve(data);
+                }
+            });
+        });
+        return p;
     },
-    changBg:function(url){
-        var style = {
-            background: "url("+url+")",
-            backgroundSize: "100% 100%"
-        };
-        this.setState({bgStyle:style});
+    componentDidMount: function() {
+        this.state.promise.then(function(data){
+            var backUrl = data.user[0].background.url,
+                avatar = data.user[0].avatar.url;
+            if(backUrl){
+                var style = {
+                    background: "url("+backUrl+")",
+                    backgroundSize: "100% 100%"
+                };
+                this.setState({bgStyle:style});
+            }
+            if(avatar){
+                PubSubEvent.publish("changeAvatar",[avatar]);
+            }
+        }.bind(this));
+    },
+    getInitialState: function() {
+        var p = this.loadDataFromFile();
+        return {promise:p,bgStyle:{}};
+    },
+    reloadRequest:function(type,subtype,url){
+        if(subtype&&subtype == "background"){
+            var style = {
+                background: "url("+url+")",
+                backgroundSize: "100% 100%"
+            };
+            this.setState({bgStyle:style});
+        }
+            
+        $.ajax({
+            url: "/reloadData",
+            type:"get",
+            data:{type:type,subtype:subtype,data:url}
+        });
     },
     render:function(){
         return (
             <div className="mainContent" style={this.state.bgStyle}>   
                 <Header />
-                <Content url="/babyDairy/data/lifedata.json" />
+                <Content loadData={this.state.promise}/>
                 <ImagePreview />
                 <GotoTop />
-                <Tools changeBg = {this.changBg}/>
+                <Tools reloadRequest = {this.reloadRequest}/>
             </div>
         );
     }

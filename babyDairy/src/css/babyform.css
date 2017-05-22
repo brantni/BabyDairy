@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-05-10 10:44:37
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-17 11:28:01
+* @Last Modified time: 2017-05-22 14:17:53
 */
 .babyform{
 
@@ -55,8 +55,8 @@
     display:inline-block;
 }
 .babyform .uploadImg{
-    width:20px;
-    height:20px;
+    width:30px;
+    height:30px;
     margin-right: 5px;
     margin-top: 5px;
     vertical-align: bottom;
