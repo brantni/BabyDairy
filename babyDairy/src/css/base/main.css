@@ -1,0 +1,37 @@
+/* 
+* @Author: Marte
+* @Date:   2017-05-05 11:28:57
+* @Last Modified by:   Marte
+* @Last Modified time: 2017-05-23 10:49:41
+*/
+*{
+    margin:0;
+    padding:0;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body{
+    font:12px 'Microsoft Yahei',Verdana,Helvetica,Arial,sans-serit;
+    color: #333;
+    background:#F2F2F5;
+}
+a{text-decoration: none;}
+a:link, a:visited{color:inherit;}
+a:hover{text-decoration: none;}
+
+strong{
+    font-weight: 800;
+    color:#000;
+}
+.g-clear:after {
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    content: '';
+}
+.g-hidden{
+    display:none;
+}

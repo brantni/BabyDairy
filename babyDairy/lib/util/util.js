@@ -2,10 +2,12 @@
 * @Author: Marte
 * @Date:   2017-05-19 10:16:24
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-19 10:16:45
+* @Last Modified time: 2017-05-27 10:35:19
 */
-var Util = (function(){
-    function uploadFile(e){
+// var Util = (function(){
+var Util = {};
+    Util.uploadFile = function(e){
+    // function uploadFile(e){
         var filePromise = new Promise(function(resolve,reject){
             var file = e.target.files[0];
             var reader = new FileReader();
@@ -24,7 +26,8 @@ var Util = (function(){
         });
         return filePromise;
     }
-    return {
-        uploadFile : uploadFile
-    }
-})();
+//     return {
+//         uploadFile : uploadFile
+//     }
+// })();
+export {Util};

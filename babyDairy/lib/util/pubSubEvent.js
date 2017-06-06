@@ -2,9 +2,10 @@
 * @Author: Marte
 * @Date:   2017-05-12 14:35:14
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-05-16 14:37:25
+* @Last Modified time: 2017-05-27 10:31:37
 */
-(function PubSubEvent(){
+// var PubSubEvent = (function(){
+var PubSubEvent = {};
     //events={key:[fun1,fun2]}
     var events = {};
 
@@ -106,5 +107,7 @@
         return true;
     }
 
-    window.PubSubEvent = PubSubEvent;
-})();
+    // window.PubSubEvent = PubSubEvent;
+// })();
+
+export {PubSubEvent} ;

@@ -1,0 +1,83 @@
+.photoSlider{
+    
+}
+.photoSlider-back{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+}
+.photoSlider .wrap{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    height: 500px;
+    margin-left: -250px;
+    margin-top: -250px;
+    z-index: 9999;
+}
+.photoSlider ul{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+.photoSlider ul li{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    opacity: 0;
+    position:absolute;
+    left:0px;
+    -webkit-transition: opacity .3s ease-out;
+       -moz-transition: opacity .3s ease-out;
+        -ms-transition: opacity .3s ease-out;
+         -o-transition: opacity .3s ease-out;
+            transition: opacity .3s linear;
+}
+.photoSlider ul li.show{
+    opacity: 1;
+}
+.photoSlider img{
+    width:100%;
+    height:100%;
+}
+.photoSlider .arrow{
+    position:absolute;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    width: 50px;
+    height: 50px;
+    cursor:pointer;
+    opacity:0;
+    -webkit-transition: opacity .3s ease-out;
+       -moz-transition: opacity .3s ease-out;
+        -ms-transition: opacity .3s ease-out;
+         -o-transition: opacity .3s ease-out;
+            transition: opacity .3s linear;
+}
+.photoSlider .wrap:hover .arrow{
+    opacity:1;
+}
+.photoSlider .arrow.left{
+    left:0px;
+    top:225px;
+    background-image: url(/babyDairy/src/image/leftarrow.png);
+}
+.photoSlider .arrow.right{
+    right:0px;
+    top:225px;
+    background-image: url(/babyDairy/src/image/rightarrow.png);
+}
+.photoSlider .close{
+    position:absolute;
+    right:-16px;
+    top:-16px;
+    background: url(/babyDairy/src/image/close.png) no-repeat;
+    width: 32px;
+    height: 32px;
+    cursor:pointer;
+}
